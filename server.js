@@ -1,5 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from'express';
+import bodyParser from 'body-parser';
+import bcrypt from'bcryptjs';
 
 
 const app = express();
@@ -46,13 +47,20 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     
+    let pass =''
     const { email, name, password } = req.body;
+    bcrypt.hash(password, 10, (err, hash) => {
+        // Store hash in your password DB
+        console.log(hash)
+        pass = hash
+        // password = hash;
+});
+
     database.users.push({
-        
             id: (database.users.length + 1).toString(),
             name: name,
             email: email,
-            password: password,
+            password: pass,
             entries: 0,
             joined: new Date()
     })
