@@ -1,10 +1,12 @@
 import express from'express';
 import bodyParser from 'body-parser';
-import bcrypt from'bcryptjs';
+import bcrypt from 'bcryptjs';
+import cors from 'cors';
 
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors);
 
 const database = {
 
