@@ -5,7 +5,7 @@ import cors from 'cors';
 import knex from 'knex';
 // !! something wrong with cors!!
 
-const postgres =knex({
+const db =knex({
   client: 'pg',
   connection: {
     host: '127.0.0.1',
@@ -16,8 +16,8 @@ const postgres =knex({
   },
 });
 
-postgres.select('name').from('users').then(data => {
-    console.log(data)});
+// db.select('name').from('users').then(data => {
+//     console.log(data)});
 
 
 const app = express();
@@ -72,16 +72,21 @@ app.post('/register', (req, res) => {
         console.log(hash)
         pass = hash
         // password = hash;
+        db('users').insert({
+            email: email,
+            name: name,
+            joined: new Date()
+    }).then(console.log)
 });
 
-    database.users.push({
-            id: (database.users.length + 1).toString(),
-            name: name,
-            email: email,
-            password: pass,
-            entries: 0,
-            joined: new Date()
-    })
+    // database.users.push({
+    //         id: (database.users.length + 1).toString(),
+    //         name: name,
+    //         email: email,
+    //         password: pass,
+    //         entries: 0,
+    //         joined: new Date()
+    // })
     res.json(database.users[database.users.length - 1]);
 }) 
 
