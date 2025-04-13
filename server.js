@@ -72,11 +72,15 @@ app.post('/register', (req, res) => {
         console.log(hash)
         pass = hash
         // password = hash;
-        db('users').insert({
-            email: email,
-            name: name,
-            joined: new Date()
-    }).then(console.log)
+        db('users')
+            .returning('*')
+            .insert({
+                email: email,
+                name: name,
+                joined: new Date()
+            }).then(user => {
+                res.json(user[0]);
+            }).catch(err => res.status(404).json('unable to register'))
 });
 
     // database.users.push({
@@ -87,7 +91,6 @@ app.post('/register', (req, res) => {
     //         entries: 0,
     //         joined: new Date()
     // })
-    res.json(database.users[database.users.length - 1]);
 }) 
 
 app.get('/profile/:id', (req, res) => {
