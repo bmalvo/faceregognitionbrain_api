@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
-// !! something wrong with cors!!
+
 
 const db =knex({
   client: 'pg',
@@ -16,8 +16,8 @@ const db =knex({
   },
 });
 
-// db.select('name').from('users').then(data => {
-//     console.log(data)});
+db.select('name').from('users').then(data => {
+    console.log(data)});
 
 
 const app = express();
@@ -29,7 +29,7 @@ const database = {
     users: [
         {
             id: '1',
-            name: 'Stefka',
+            name: 'Stefka2',
             email: 'stefka@cat.com',
             password: 'cookies',
             entries: 0,
@@ -47,8 +47,8 @@ const database = {
 }
 
 app.get('/', (req, res) => {
-
-    res.send(database.users)
+    console.log(db.users)
+    res.send(db.users)
 })
 
 app.post('/signin', (req, res) => {
@@ -97,20 +97,33 @@ app.get('/profile/:id', (req, res) => {
 
     const { id } = req.params;
     console.log(req.params.id)
-    let found = false;
-
-    database.users.forEach(user => {
-
-        if (user.id === id) {
-            
-            found = true;
-            return res.json(user);
-        } 
+    // let found = false;
+    db.select('*').from('users').where({
+        id: id
+    }).then(user => {
+        // console.log(user)
+        if (user.length) {
+            res.json(user[0])
+        } else {
+            res.status(400).json('error getting user')
+        }
     })
-    if (!found) {
+        .catch(err => {
+        res.status(400),json('not found')
+    })
+
+    // database.users.forEach(user => {
+
+    //     if (user.id === id) {
+            
+    //         found = true;
+    //         return res.json(user);
+    //     } 
+    // })
+    // if (!found) {
         
-        res.status(400).json('not found');
-    }
+    //     res.status(400).json('not found');
+    // }
 })
 
 app.put('/image', (req, res) => {
