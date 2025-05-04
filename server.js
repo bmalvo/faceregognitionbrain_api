@@ -25,8 +25,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-    console.log(db.users)
-    res.send(db.users)
+    res.send('success!')
 })
 
 app.post('/signin', (req, res) => {
@@ -49,8 +48,6 @@ app.post('/signin', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    
-    let pass = ''
     const { email, name, password } = req.body;
 
     const hash = bcrypt.hashSync(password);
@@ -80,7 +77,6 @@ app.post('/register', (req, res) => {
         console.log(err)
     })
 });
-// }) 
 
 app.get('/profile/:id', (req, res) => {
 
